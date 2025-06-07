@@ -33,6 +33,7 @@ func main() {
 		fmt.Println("6. Analisis Engagement Tertinggi")
 		fmt.Println("7. Urutkan berdasarkan Tanggal")
 		fmt.Println("8. Urutkan berdasarkan Engagement")
+		fmt.Println("9. Cari Ide Konten")
 		fmt.Println("0. Keluar")
 		fmt.Print("Pilih menu: ")
 		fmt.Scanln(&pilihan)
@@ -53,6 +54,41 @@ func main() {
 			urutkanTanggalSelection(&dataKonten, n)
 		} else if pilihan == 8 {
 			urutkanEngagementInsertion(&dataKonten, n)
+		} else if pilihan == 9 {
+			var opsiCari int
+			var input string
+
+			fmt.Println("\n================ Menu Pencarian Ide Konten ===============")
+			fmt.Println("1. Cari Berdasarkan Keyword Judul")
+			fmt.Println("2. Cari Berdasarkan Kategori")
+			fmt.Println("3. Cari Berdasarkan Judul Lengkap")
+			fmt.Println("Pilih Jenis Pencarian : ")
+			fmt.Scanln(&opsiCari)
+
+			if opsiCari == 1 {
+				fmt.Print("Masukan Keyword Yang Dicari : ")
+				fmt.Scanln(&input)
+				searchByKeyword(dataKonten, n, input)
+			} else if opsiCari == 2 {
+				fmt.Print("Masukan Kategori Yang Dicari : ")
+				fmt.Scanln(&input)
+				searchByKeyword(dataKonten, n, input)
+			} else if opsiCari == 3 {
+				var index int
+				
+				fmt.Print("Masukan Judul Lengkap (Pastikan Sudah Terurut) : ")
+				fmt.Scanln(&input)
+
+				index = binarySearchJudul(dataKonten, n, input)
+
+				if index != -1 {
+					fmt.Println("Judul : ", dataKonten[index].judul)
+					fmt.Println("Kategori : ", dataKonten[index].kategori)
+					fmt.Println("Platform : ", dataKonten[index].platform)
+				} else {
+					fmt.Println("!!!!! Judul Tidak Ditemukan !!!!!")
+				}
+			}
 		} else if pilihan == 0 {
 			fmt.Println("Terima kasih! Keluar dari program...")
 			repeat = false
@@ -236,83 +272,17 @@ func hapusKonten(data *[maxKonten]app, n *int) {
 }
 
 func tampilkanKonten(data [maxKonten]app, n int) {
-	var pilihan, i, indeks int
-	var target string
-	var ditemukan bool
-
 	if n == 0 {
 		fmt.Println("\n=======================================================================")
 		fmt.Println("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
-		fmt.Println("\n=======================================================================")
+		fmt.Println("=======================================================================")
 	} else {
-		fmt.Println("\n=== Menu Tampilkan Konten ===")
-		fmt.Println("1. Tampilkan semua konten")
-		fmt.Println("2. Cari berdasarkan judul (Binary Search)")
-		fmt.Println("3. Cari berdasarkan kategori (Sequential Search)")
-		fmt.Print("Pilihan (1-3): ")
-		fmt.Scanln(&pilihan)
-
-		if pilihan == 1 {
-			fmt.Println("\n=== Daftar Semua Konten ===")
-			for i = 0; i < n; i++ {
-				fmt.Printf("%d. %s - %s [%s] pada %s %s | Like: %d, Komentar: %d, Share: %d\n",
-					i+1, data[i].judul, data[i].platform, data[i].kategori,
-					data[i].tanggalPosting, data[i].jamPosting,
-					data[i].jumlahLike, data[i].jumlahKomentar, data[i].jumlahShare)
-			}
-
-		} else if pilihan == 2 {
-			fmt.Print("Masukkan judul yang ingin dicari: ")
-			fmt.Scanln(&target)
-
-			selectionSortJudul(&data, n)
-
-			indeks = binarySearchJudul(data, n, target)
-			if indeks != -1 {
-				fmt.Println("Konten ditemukan:")
-				fmt.Printf("%s - %s [%s] pada %s %s | Like: %d, Komentar: %d, Share: %d\n",
-					data[indeks].judul, data[indeks].platform, data[indeks].kategori,
-					data[indeks].tanggalPosting, data[indeks].jamPosting,
-					data[indeks].jumlahLike, data[indeks].jumlahKomentar, data[indeks].jumlahShare)
-			} else {
-				fmt.Println("Konten dengan judul tersebut tidak ditemukan.")
-			}
-
-		} else if pilihan == 3 {
-			fmt.Println("Pilih Kategori yang ingin dicari:")
-			fmt.Println("1. Edukasi")
-			fmt.Println("2. Hiburan")
-			fmt.Println("3. Promosi")
-			fmt.Print("Pilihan (1-3): ")
-			fmt.Scanln(&pilihan)
-
-			if pilihan == 1 {
-				target = "Edukasi"
-			} else if pilihan == 2 {
-				target = "Hiburan"
-			} else if pilihan == 3 {
-				target = "Promosi"
-			} else {
-				fmt.Println("Pilihan tidak valid, default ke 'Edukasi'")
-				target = "Edukasi"
-			}
-
-			ditemukan = false
-			fmt.Println("\nHasil pencarian berdasarkan kategori:", target)
-			for i = 0; i < n; i++ {
-				if data[i].kategori == target {
-					fmt.Printf("%d. %s - %s [%s] pada %s %s | Like: %d, Komentar: %d, Share: %d\n",
-						i+1, data[i].judul, data[i].platform, data[i].kategori,
-						data[i].tanggalPosting, data[i].jamPosting,
-						data[i].jumlahLike, data[i].jumlahKomentar, data[i].jumlahShare)
-					ditemukan = true
-				}
-			}
-			if !ditemukan {
-				fmt.Println("Tidak ada konten dengan kategori tersebut.")
-			}
-		} else {
-			fmt.Println("Pilihan tidak valid.")
+		fmt.Println("\n=== Daftar Semua Konten ===")
+		for i := 0; i < n; i++ {
+			fmt.Printf("%d. %s - %s [%s] pada %s %s | Like: %d, Komentar: %d, Share: %d\n",
+				i+1, data[i].judul, data[i].platform, data[i].kategori,
+				data[i].tanggalPosting, data[i].jamPosting,
+				data[i].jumlahLike, data[i].jumlahKomentar, data[i].jumlahShare)
 		}
 	}
 }
@@ -332,8 +302,35 @@ func binarySearchJudul(data [maxKonten]app, n int, target string) int {
 			kanan = tengah - 1
 		}
 	}
-
 	return -1
+}
+
+func searchByKeyword(data [maxKonten]app, n int, keyword string) {
+	var ditemukan bool = false
+	fmt.Println("Hasil pencarian berdasarkan kata kunci di judul:")
+	for i := 0; i < n; i++ {
+		if contains(data[i].judul, keyword) {
+			fmt.Printf("- [%d] %s (Kategori: %s, Platform: %s)\n", i+1, data[i].judul, data[i].kategori, data[i].platform)
+			ditemukan = true
+		}
+	}
+	if !ditemukan {
+		fmt.Println("Tidak ada konten dengan kata kunci tersebut.")
+	}
+}
+
+func searchByKategori(data [maxKonten]app, n int, kategori string) {
+	var ditemukan bool = false
+	fmt.Println("Hasil pencarian berdasarkan kategori:")
+	for i := 0; i < n; i++ {
+		if data[i].kategori == kategori {
+			fmt.Printf("- [%d] %s (Platform: %s, Jadwal: %s %s)\n", i+1, data[i].judul, data[i].platform, data[i].tanggalPosting, data[i].jamPosting)
+			ditemukan = true
+		}
+	}
+	if !ditemukan {
+		fmt.Println("Tidak ada konten dalam kategori tersebut!")
+	}
 }
 
 func selectionSortJudul(data *[maxKonten]app, n int) {
@@ -351,6 +348,7 @@ func selectionSortJudul(data *[maxKonten]app, n int) {
 		data[min] = temp
 	}
 }
+
 
 func jadwalkanKonten(data *[maxKonten]app, n int) {
 	if n == 0 {
