@@ -57,6 +57,190 @@ algoritma
 		output("Pilihan tidak valid.") 
 endprogram
 
+procedure tambahKonten(in/out data : array [maxKonten] of app, in/out n : integer)
+kamus
+	kontenBaru : app
+	pilihan : integer
+algoritma
+	if n >= maxKonten then
+		output("Data sudah penuh, tidak bisa menambah konten lagi.")
+	return
+	endif
+	
+	output("=== Tambah Konten Baru ===")
+	output("Judul: ")
+	input(kontenBaru.judul)
+	
+	output("Pilih Platform: ")
+	output("1. Instagram")
+	output("2. TikTok")
+	output("3. YouTube")
+	output("Pilihan (1-3): ")
+	input(pilihan)
+	
+	if pilihan == 1 then
+		kontenBaru.Platform <- "Instagram"
+	else if pilihan == 2 then 
+		kontenBaru.Platform <- "TikTok"
+	else if pilihan == 3 then 
+		kontenBaru.Platform <- "YouTube"
+	else 
+		output("Pilihan tidak valis, default ke "Instagram"")
+	kontenBaru.platform <- "Instagram"
+	endif
+
+	output("Pilih Kategori: ")
+	output("1. Edukasi")
+	output("2. Hiburan")
+	output("3. Promosi")
+	output("Pilihan (1-3): ")
+	input(pilihan)
+
+	if pilihan == 1 then
+		kontenBaru.Platform <- "Edukasi"
+	else if pilihan == 2 then 
+		kontenBaru.Platform <- "Hiburan"
+	else if pilihan == 3 then 
+		kontenBaru.Platform <- "Promosi"
+	else 
+		output("Pilihan tidak valis, default ke "Edukasi"")
+	kontenBaru.platform <- "Edukasi"
+	endif
+
+	output("Tanggal Posting (DD-MM-YYYY): ")
+	input(kontenBaru.tanggalPosting)
+
+	output("Jam Posting (HH:MM): ")
+	input(kontenBaru.jamPosting)
+
+	output("Jumlah Like: ")
+	input(kontenBaru.jumlahLike)
+
+	output("Jumlah Komentar: ")
+	input(kontenBaru.jumlahKomentar)
+
+	output("Jumlah Share")
+	input(kontenBaru.jumlahShare)
+
+	data[n] <- kontenBaru
+	n <- n + 1
+	output("Konten berhasil ditambahkan!")
+
+endfunction
+
+function ubahKonten(data : array [maxKonten] of app, n : integer)
+kamus
+	judulCari : string
+	i, pilihan : integer
+	ditemukan : boolean = false
+
+algoritma
+	if n == 0 then
+		output("=======================================================================")
+		output("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
+		output("=======================================================================")
+	else
+		output("Masukkan judul konten yan ingin diubah: ")
+		input(judulCari)
+
+		for i <- 0 to n - 1 do
+			if data[i].judul == judulCari && not ditemukan then
+				output("Judul baru: ")
+				input(&data[i].judul)
+
+				output("Pilih Platform baru:")
+				output("1. Instagram")
+				output("2. TikTok")
+				output("3. YouTube")
+				output("Pilihan (1-3):")
+				input(pilihan)
+			
+				if pilihan == 1 then
+					data[i].platform <- "Instagram"
+				else if pilihan == 2 then 
+					data[i].platform <- "TikTok"
+				else if pilihan == 3 then 
+					data[i].platform <- "YouTube"
+				else 
+					output("Pilihan tidak valid, default ke "Instagram"")
+					data[i].platform <- "Instagram"
+				endif
+
+				output("Pilih Kategori baru: ")
+				output("1. Edukasi")
+				output("2. Hiburan")
+				output("3. Promosi")
+				output("Pilihan (1-3): ")
+				input(pilihan)
+
+				if pilihan == 1 then
+					data[i].kategori <- "Edukasi"
+				else if pilihan == 2 then 
+					data[i].kategori <- "Hiburan"
+				else if pilihan == 3 then 
+					data[i].kategori <- "Promosi"
+				else 
+					output("Pilihan tidak valid, default ke "Edukasi"")
+					data[i].kategori <- "Edukasi"
+				endif
+
+				output("Tanggal baru: ")
+				input(data[i].tanggalPosting)
+
+				output("Jam baru: ")
+				input(data[i].jamPosting)
+	
+				output("Jumlah Like: ")
+				input(data[i].jumlahLike)
+
+				output("Jumlah Komentar: ")
+				input(data[i].jumlahKomentar)
+	
+				output("Jumlah Share")
+				input(data[i].jumlahShare)
+	
+				output("Konten berhasil diubah")
+				ditemukan <- true
+			endif
+		enfor
+
+		if not ditemukan then 
+			output("Konten tidak ditemukan.")
+		endif
+	endif
+endfunction
+
+
+procedure hapusKonten(in/out data : array [maxKonten] of app, in/out n : integer) 
+kamus
+	judulCari : string
+	i, j : integer
+	ditemukan : boolean <- false
+algoritma
+	if n == 0 then	
+		output("=======================================================================")
+		output("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
+		output("=======================================================================")
+	else 
+		output("Masukkan judul konten yang ingin dihapus: ")
+		input(judulCari)
+
+		for i <- 0 to n - 1 do
+			if data[i].judul == judulCari and not ditemukan then
+				for j <- i to n - 2 do 
+					data[j] <- data(j+1)
+				endfor
+				n <- n - 1
+				output("Konten berhasil dihapus!")
+				ditemukan <- true
+			endif
+		endfor
+
+		if not ditemukan then
+		output("Konten tidak ditemukan")
+	endif
+endfuntion
+
 
 function tampilkanKonten(data : array : [1..maxKonten]app, n : integer) {
 kamus
@@ -137,4 +321,122 @@ algoritma
 		endif
 	endif
 endfunction
+
+procedure jadwalKonten(in/out data : array [] of app, in n : integer)
+kamus
+	judulCari, tanggalBaru, jamBaru : string
+	i : integer
+	ditemukan : Boolean = false
+
+algoritma
+	if n == 0 then 
+		output("")
+		output("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu")
+		output("")
+	else 
+		output("Masukkan judul konten yang ingin dijadwalkan ulang:")
+		input(juduCari)
+	
+		for i <- 0 to n - 1 do
+			if data[i].judul == judulCari and not ditemukan then
+				output("Masukkan tanggal baru (YYYY-MM-DD): ")
+				input(tanggalBaru)
+			
+				output("Masukkan jam baru (HH:MM):")
+				input(jamBaru)
+			
+				data[i].tanggalPosting <- tanggalBaru
+				data[i].jamPosting <- jamBaru
+			
+				output("Penjadwalan Berhasil diperbarui!")
+				ditemukan <- true
+			endif
+		endfor
+
+		if not ditemukan then 
+			output("Konten tidak ditemukan.")
+		endif
+	endif
+endfunction
+
+function analisisEngagementTertinggi(data : array [macKonten] of app, n int) 
+kamus
+	tanggalMulai, tanggalAkhir : string
+	i : integer
+	maxIndex : integer = -1
+	engagementSaatIni : integer = -1
+	engagementTertinggi : integer = -1
+
+algoritma
+	if n == 0 then	
+		output("=======================================================================")
+		output("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
+		output("=======================================================================")
+	else 
+		output("Masukkan tanggal mulai (DD-MM-YYYY): ")
+		input(tanggalMulai)
+		output("Masukkan tanggal akhir (DD-MM-YYYY): ")
+		input(tanggalAkhir)	
+	
+		for i <- 0 to n - 1 do
+			if data[i].tanggalPosting >= tanggalMulai and data[i].tanggalPosting <= tanggalAkhir then
+				engagementSaatIni <- data[i].jumlahLike + data[i].jumlahKomentar + data[i].jumlahShare
+				if engagementSaatIni > engagementTertinggi then
+					engagementTertinggi <- engagementSaatIni
+					maxIndex <- i
+				endif
+			endif
+		endfor
+
+	
+		if maxIndex != -1 then
+			output("Konten dengan engagement tertinggi: ")
+			output("Judul: ", data[maxIndex].judul," | Platform: ", data[maxIndex].platform, " | 
+			tanggal : ", data[maxIndex].tanggalPosting, " | jam: ", data[maxIndex].jamPosting)
+			output("Like: ", data[maxIndex].jumlahLike, " | Komentar: ", data[maxIndex].jumlahKomentar, 
+			" | Share : ", data[maxIndex].jumlahShare, " | Total : ", engagementTertinggi)
+		else 
+			output("Tidak ada konten dalam periode tersebut.")
+		endif
+	endif
+endfunction
+
+function binarySearchJudul(data : array [maxKonten] of app, n : integer, target : string) -> integer
+kamus
+	kiri, kanan, tengah : integer
+
+algoritma
+	kiri <- 0
+	kanan <- n -1
+
+	for kiri <= kanan do
+		tengah <- (kiri + kanan) div 2
+		if data[tengah].judul == target then
+			return tengah
+		else if  data[tengah].judul < target then
+			kiri <- tengah + 1
+		else 
+			kanan <- tengah - 1
+		endif
+	endfor
+	return -1
+endfunction
+
+procedure selectionSortJudul(in/out data : array [maxKonten] of app, in n integer)
+kamus
+	i, j, min : integer
+	temp : app
+algoritma
+	for i <- 0 to n - 2 do
+		min <- i
+		for j <- i to n - 1 do
+			if data[j].judul < data[min].judul then
+				min <- j
+			endif
+		enfor
+		temp <- data[i]
+		data[i] <- data[min]
+		data[min] <- temp
+	enfor
+endprocedure
 
