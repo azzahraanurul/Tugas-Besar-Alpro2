@@ -242,85 +242,22 @@ algoritma
 endfuntion
 
 
-function tampilkanKonten(data : array : [1..maxKonten]app, n : integer) {
+function tampilkanKonten(data : array [1..maxKonten] of app, n : integer) {
 kamus
-	pilihan, i, indeks : integer
-	target : string
-	ditemukan : boolean
+    i : integer
 algoritma
-	if n == 0 then
-		output("\n=======================================================================")
-		output("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
-		output("=========================================================================")
-	else
-		output("=== Menu Tampilkan Konten ===")
-		output("1. Tampilkan semua konten")
-		output("2. Cari berdasarkan judul (Binary Search)")
-		output("3. Cari berdasarkan kategori (Sequential Search)")
-		output("Pilihan (1-3): ")
-		input(pilihan)
-
-		if pilihan == 1 then
-			output("=== Daftar Semua Konten ===")
-			for i <- 0 to n - 1 do
-				output(i+1, data[i].judul, data[i].platform, data[i].kategori,
-					data[i].tanggalPosting, data[i].jamPosting, "Like: ",
-					data[i].jumlahLike, "Komentar: ", data[i].jumlahKomentar, "Share: ", data[i].jumlahShare)
-			endfor
-
-		else if pilihan == 2 then
-			output("Masukkan judul yang ingin dicari: ")
-			input(target)
-
-			selectionSortJudul(data, n)
-
-			indeks <- binarySearchJudul(data, n, target)
-			if indeks != -1 then
-				output("Konten ditemukan:")
-				output(data[indeks].judul, data[indeks].platform, data[indeks].kategori, "pada",
-					data[indeks].tanggalPosting, data[indeks].jamPosting, "| Like: ",
-					data[indeks].jumlahLike, "Komentar: ", data[indeks].jumlahKomentar, "Share: ", data[indeks].jumlahShare)
-			else
-				output("Konten dengan judul tersebut tidak ditemukan.")
-			endif
-
-		else if pilihan == 3 then
-			output("Pilih Kategori yang ingin dicari:")
-			output("1. Edukasi")
-			output("2. Hiburan")
-			output("3. Promosi")
-			output("Pilihan (1-3): ")
-			output(pilihan)
-
-			if pilihan == 1 then
-				target <- "Edukasi"
-			else if pilihan == 2 then
-				target <- "Hiburan"
-			else if pilihan == 3 then
-				target <- "Promosi"
-			else then
-				fmt.Println("Pilihan tidak valid, default ke 'Edukasi'")
-				target <- "Edukasi"
-			endif
-
-			ditemukan <- false
-			output("Hasil pencarian berdasarkan kategori:", target)
-			for i <- 0 to n - 1 do
-				if data[i].kategori == target then
-					output(i+1, data[i].judul, data[i].platform, data[i].kategori, "pada",
-						data[i].tanggalPosting, data[i].jamPosting, "| Like: ",
-						data[i].jumlahLike, "Komentar: ", data[i].jumlahKomentar, "Share: ", data[i].jumlahShare)
-					ditemukan <- true
-				endif
-			endfor
-			if !ditemukan {
-				output("Tidak ada konten dengan kategori tersebut.")
-			endif
-		else
-			output("Pilihan tidak valid.")
-		endif
-	endif
-endfunction
+    if n == 0 then
+        output("\n=======================================================================")
+        output("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
+        output("=======================================================================")
+    else
+        output("=== Daftar Semua Konten ===")
+        for i <- 0 to n - 1 do
+            output(i+1, ". ", data[i].judul, " - ", data[i].platform, " [", data[i].kategori, "] pada ", data[i].tanggalPosting, " ", data[i].jamPosting,
+                   " | Like: ", data[i].jumlahLike, ", Komentar: ", data[i].jumlahKomentar, ", Share: ", data[i].jumlahShare)
+        endfor
+    endif
+endprocedure
 
 procedure jadwalKonten(in/out data : array [] of app, in n : integer)
 kamus
