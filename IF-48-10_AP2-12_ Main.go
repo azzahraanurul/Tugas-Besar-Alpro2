@@ -130,18 +130,17 @@ func tambahKonten(data *[maxKonten]app, n *int) {
 }
 
 func ubahKonten(data *[maxKonten]app, n int) {
+	var judulCari string
+	var i, pilihan int
+	var ditemukan bool = false
+	
 	if n == 0 {
 		fmt.Println("\n=======================================================================")
 		fmt.Println("Tidak Ada Data Yang Tersimpan, Silahkan Tambahkan Data Terlebih Dahulu.")
 		fmt.Println("\n=======================================================================")
 	} else {
-		var judulCari string
-		var i, pilihan int
-		var ditemukan bool = false
-
 		fmt.Print("Masukkan judul konten yang ingin diubah: ")
 		fmt.Scanln(&judulCari)
-
 		for i = 0; i < n; i++ {
 			if data[i].judul == judulCari && !ditemukan {
 				fmt.Print("Judul baru: ")
@@ -200,7 +199,6 @@ func ubahKonten(data *[maxKonten]app, n int) {
 				ditemukan = true
 			}
 		}
-
 		if !ditemukan {
 			fmt.Println("Konten tidak ditemukan.")
 		}
