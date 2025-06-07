@@ -13,48 +13,82 @@ type app <
 contant maxKonten = 100
 
 kamus (lokal)
-	dataKonten : array [1..maxKonten] of app
-	pilihan : integer
-	n : integer = 0
-	repeat : boolean = false
+    dataKonten : array [1..maxKonten] of app
+    n, pilihan, opsiCari, index : integer
+    input : string
+    repeat : boolean
 
 algoritma
-	repeat = true
-	for repeat do
-	output("======SELAMAT DATANG DI APP MANAJER======")
-	output("============== MENU UTAMA ===============")
-	output("1. Tambah Konten")
-	output("2. Ubah Konten")
-	output("3. Hapus Konten")
-	output("4. Tampilkan Semua Konten")
-	output("5. Jadwalkan Konten")
-	output("6. Analisis Engagement Tertinggi")
-	output("7. Urutkan berdasarkan Tanggal")
-	output("8. Urutkan Berdasarkan Engagement")
-	output("0. Keluar")
-	output("Pilih Menu: ")
-	input(pilihan)
+    n <- 0
+    repeat <- true
 
-	if pilihan == 1 then
-		tambahKonten(dataKonten, n)
-	else if pilihan == 2 then
-		ubahKonten(dataKonten, n) 
-	else if pilihan == 3 then
-		hapusKonten(dataKonten, n) 
-	else if pilihan == 4 then
-		tampikanKonten(dataKonten, n) 
-	else if pilihan == 5 then
-		jadwalkanKonten(dataKonten, n) 
-	else if pilihan == 6 then
-		analisisEngagementTertiggi(dataKonten, n) 
-	else if pilihan == 7 then
-		urutkanTanggalSelection(dataKonten, n)
-	else if pilihan == 8 then
-		urutkanEngagementInsertion(dataKonten, n)
-	else if pilihan == 0 then
-		output("Terima kasih! Keluar dari program...") 
-	else 
-		output("Pilihan tidak valid.") 
+    repeat
+        output("\n====== SELAMAT DATANG DI APP MANAJER ======")
+        output("\n================ MENU UTAMA ===============")
+        output("1. Tambah Konten")
+        output("2. Ubah Konten")
+        output("3. Hapus Konten")
+        output("4. Tampilkan Semua Konten")
+        output("5. Jadwalkan Konten (Reschedule)")
+        output("6. Analisis Engagement Tertinggi")
+        output("7. Urutkan berdasarkan Tanggal")
+        output("8. Urutkan berdasarkan Engagement")
+        output("9. Cari Ide Konten")
+        output("0. Keluar")
+        output("Pilih menu: ")
+        input(pilihan)
+
+        jika pilihan = 1 maka
+            panggil tambahKonten(dataKonten, n)
+        jika tidak, jika pilihan = 2 maka
+            panggil ubahKonten(dataKonten, n)
+        jika tidak, jika pilihan = 3 maka
+            panggil hapusKonten(dataKonten, n)
+        jika tidak, jika pilihan = 4 maka
+            panggil tampilkanKonten(dataKonten, n)
+        jika tidak, jika pilihan = 5 maka
+            panggil jadwalkanKonten(dataKonten, n)
+        jika tidak, jika pilihan = 6 maka
+            panggil analisisEngagementTertinggi(dataKonten, n)
+        jika tidak, jika pilihan = 7 maka
+            panggil urutkanTanggalSelection(dataKonten, n)
+        jika tidak, jika pilihan = 8 maka
+            panggil urutkanEngagementInsertion(dataKonten, n)
+        jika tidak, jika pilihan = 9 maka
+            output("\n================ Menu Pencarian Ide Konten ===============")
+            output("1. Cari Berdasarkan Keyword Judul")
+            output("2. Cari Berdasarkan Kategori")
+            output("3. Cari Berdasarkan Judul Lengkap")
+            output("Pilih Jenis Pencarian : ")
+            input(opsiCari)
+
+            jika opsiCari = 1 maka
+                output("Masukkan Keyword Yang Dicari : ")
+                input(input)
+                panggil searchByKeyword(dataKonten, n, input)
+            jika tidak, jika opsiCari = 2 maka
+                output("Masukkan Kategori Yang Dicari : ")
+                input(input)
+                panggil searchByKeyword(dataKonten, n, input)
+            jika tidak, jika opsiCari = 3 maka
+                output("Masukkan Judul Lengkap (Pastikan Sudah Terurut) : ")
+                input(input)
+                index <- binarySearchJudul(dataKonten, n, input)
+                jika index != -1 maka
+                    output("Judul : ", dataKonten[index].judul)
+                    output("Kategori : ", dataKonten[index].kategori)
+                    output("Platform : ", dataKonten[index].platform)
+                jika tidak
+                    output("!!!!! Judul Tidak Ditemukan !!!!!")
+                endif
+            endif
+        jika tidak, jika pilihan = 0 maka
+            output("Terima kasih! Keluar dari program...")
+            repeat <- false
+        jika tidak
+            output("Pilihan tidak valid.")
+        endif
+    until repeat = false
 endprogram
 
 procedure tambahKonten(in/out data : array [maxKonten] of app, in/out n : integer)
