@@ -14,7 +14,35 @@ type app struct {
 }
 
 const maxKonten = 100
+func panjang(s string) int {
+	var i int
+	i = 0
+	for range s {
+		i++
+	}
+	return i
+}
 
+func contains(s, sub string) bool {
+	var i, j, countS, countSub int
+	var cocok bool
+
+	countS = panjang(s)
+	countSub = panjang(sub)
+
+	for i = 0; i <= countS - countSub; i++ {
+		cocok = true
+		for j = 0; j < countSub; j++ {
+			if s[i+j] != sub[j] {
+				cocok = false
+			}
+		}
+		if cocok {
+			return true
+		}
+	}
+	return false
+}
 func main() {
 	var dataKonten [maxKonten]app
 	var n int = 0
