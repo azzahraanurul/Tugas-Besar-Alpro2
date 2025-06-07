@@ -12,6 +12,20 @@ type app <
 >
 contant maxKonten = 100
 
+function contains(judulKonten : array [100] of string, n : integer, target : string) -> boolean
+kamus
+	i : integer
+
+algoritma
+	for i <- 0 to n - 1 do
+		if judulKonten[i] == target then
+			return true
+		endif
+	endfor
+	return false
+endfunction
+
+
 kamus (lokal)
     dataKonten : array [1..maxKonten] of app
     n, pilihan, opsiCari, index : integer
